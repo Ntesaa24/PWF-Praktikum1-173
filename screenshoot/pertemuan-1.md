@@ -1,0 +1,1 @@
+![Hasil bukti gambar tugas 1](<ss/Screenshot 2026-02-20 163210.png>)
