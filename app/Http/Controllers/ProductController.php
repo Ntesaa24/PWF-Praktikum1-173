@@ -6,9 +6,9 @@ use App\Models\Product;
 use App\Models\User;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Database\QueryException;
 
 class ProductController extends Controller
@@ -23,6 +23,9 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request)
     {
         $validated = $request->validated();
+        $validated['qty'] = $validated['quantity'];
+        unset($validated['quantity']);
+        $validated['user_id'] = Auth::id();
 
         try {
             Product::create($validated);
@@ -71,6 +74,10 @@ class ProductController extends Controller
         Gate::authorize('update', $product);
 
         $validated = $request->validated();
+        if (isset($validated['quantity'])) {
+            $validated['qty'] = $validated['quantity'];
+            unset($validated['quantity']);
+        }
 
         try {
             $product->update($validated);

@@ -1,0 +1,5 @@
+![productlist](<ss/Screenshot 2026-04-16 232851.png>)
+![Detail](<ss/Screenshot 2026-04-16 232943.png>)
+![Edit](<ss/Screenshot 2026-04-16 233012.png>)
+![Add](<ss/Screenshot 2026-04-16 233108.png>)
+![Delete](<ss/Screenshot 2026-04-16 233137.png>)

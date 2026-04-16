@@ -10,7 +10,10 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $totalProducts = \App\Models\Product::count();
+    $lowStockCount = \App\Models\Product::where('qty', '<', 10)->count();
+    
+    return view('dashboard', compact('totalProducts', 'lowStockCount'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
