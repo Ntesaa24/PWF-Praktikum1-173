@@ -4,14 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model
 {
+    protected $table = 'product';
+
     protected $fillable = [
         'user_id',
+        'category_id',
         'name',
-        'qty',
+        'quantity',
         'price',
     ];
 
@@ -20,8 +22,8 @@ class Product extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function kategoris(): HasMany
+    public function category(): BelongsTo
     {
-        return $this->hasMany(Category::class, 'product_id');
+        return $this->belongsTo(Category::class, 'category_id');
     }
 }

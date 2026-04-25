@@ -30,6 +30,7 @@
                             <tr class="bg-white/5 border-b border-white/5">
                                 <th class="px-8 py-5 text-sm font-semibold text-slate-400 uppercase tracking-wider w-20" style="text-align: left;">#</th>
                                 <th class="px-8 py-5 text-sm font-semibold text-slate-400 uppercase tracking-wider" style="text-align: left;">Name</th>
+                                <th class="px-8 py-5 text-sm font-semibold text-slate-400 uppercase tracking-wider" style="text-align: left;">Category</th>
                                 <th class="px-8 py-5 text-sm font-semibold text-slate-400 uppercase tracking-wider" style="text-align: left;">Quantity</th>
                                 <th class="px-8 py-5 text-sm font-semibold text-slate-400 uppercase tracking-wider" style="text-align: left;">Price</th>
                                 <th class="px-8 py-5 text-sm font-semibold text-slate-400 uppercase tracking-wider" style="text-align: left;">Owner</th>
@@ -48,13 +49,14 @@
                                         </div>
                                     </td>
                                     <td class="px-8 py-6" style="text-align: left;">
-                                        @php
-                                            $isLowStock = $product->qty < 10;
-                                        @endphp
-                                        <div class="inline-flex items-center text-sm font-bold tracking-wide
-                                            {{ $isLowStock ? 'text-red-500' : 'text-emerald-500' }}">
-                                            <span class="w-2 h-2 rounded-full mr-2 {{ $isLowStock ? 'bg-red-500 animate-pulse' : 'bg-emerald-500' }}"></span>
-                                            {{ $product->qty }} {{ $isLowStock ? '(Low Stock)' : '' }}
+                                        <span class="px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-400 text-xs font-bold border border-indigo-500/20">
+                                            {{ $product->category->name ?? 'Uncategorized' }}
+                                        </span>
+                                    </td>
+                                    <td class="px-8 py-6" style="text-align: left;">
+                                        <div class="inline-flex items-center text-sm font-bold tracking-wide text-emerald-500">
+                                            <span class="w-2 h-2 rounded-full mr-2 bg-emerald-500"></span>
+                                            {{ $product->quantity }}
                                         </div>
                                     </td>
                                     <td class="px-8 py-6" style="text-align: left;">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\User;
+use App\Models\Category;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +16,7 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::all();
+        $products = Product::with(['user', 'category'])->get();
 
         return view('product.index', compact('products'));
     }
@@ -23,8 +24,6 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request)
     {
         $validated = $request->validated();
-        $validated['qty'] = $validated['quantity'];
-        unset($validated['quantity']);
         $validated['user_id'] = Auth::id();
 
         try {
@@ -57,13 +56,14 @@ class ProductController extends Controller
     public function create()
     {
         $users = User::orderBy('name')->get();
+        $categories = Category::orderBy('name')->get();
 
-        return view('product.create', compact('users'));
+        return view('product.create', compact('users', 'categories'));
     }
 
     public function show($id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::with(['user', 'category'])->findOrFail($id);
 
         return view('product.view', compact('product'));
     }
@@ -74,10 +74,6 @@ class ProductController extends Controller
         Gate::authorize('update', $product);
 
         $validated = $request->validated();
-        if (isset($validated['quantity'])) {
-            $validated['qty'] = $validated['quantity'];
-            unset($validated['quantity']);
-        }
 
         try {
             $product->update($validated);
@@ -110,8 +106,9 @@ class ProductController extends Controller
     {
         Gate::authorize('update', $product);
         $users = User::orderBy('name')->get();
+        $categories = Category::orderBy('name')->get();
 
-        return view('product.edit', compact('product', 'users'));
+        return view('product.edit', compact('product', 'users', 'categories'));
     }
 
     public function delete($id)

@@ -1,79 +1,88 @@
 <x-app-layout>
-    <div class="py-12 px-4 sm:px-6 lg:px-8 bg-[#0f111a] min-h-screen" style="background-color: #0f111a;">
-        <div class="max-w-xl mx-auto">
-            {{-- Header with Back Arrow --}}
-            <div class="flex items-center gap-4 mb-8">
-                <a href="{{ route('product.index') }}" class="p-2 rounded-lg bg-white/5 text-slate-400 hover:text-white transition-colors border border-white/5">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-                </a>
-                <div>
-                    <h1 class="text-2xl font-bold text-white tracking-tight">Edit Product</h1>
-                    <p class="text-slate-500 text-sm">Update details for <span class="text-indigo-400 font-bold">"{{ $product->name }}"</span></p>
+    <div class="py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mx-auto">
+            <div class="rounded-3xl shadow-2xl overflow-hidden shadow-black/50 p-8" style="background-color: #1a1c2a; border: 1px solid rgba(255,255,255,0.05);">
+                <div class="mb-8 flex items-center gap-4">
+                    <a href="{{ route('product.index') }}" class="text-gray-400 hover:text-white transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </a>
+                    <div>
+                        <h2 class="text-2xl font-bold text-white tracking-tight">Edit Product</h2>
+                        <p class="text-sm text-gray-400 mt-1">Update the details of your product</p>
+                    </div>
                 </div>
-            </div>
 
-            <div class="rounded-2xl shadow-2xl overflow-hidden p-8" style="background-color: #131520; border: 1px solid rgba(255,255,255,0.05);">
                 <form action="{{ route('product.update', $product->id) }}" method="POST" class="space-y-6">
                     @csrf
                     @method('PUT')
-
-                    {{-- Name Input --}}
-                    <div class="space-y-2">
-                        <label for="name" class="block text-xs font-bold text-slate-400 uppercase tracking-widest">Nama Produk</label>
-                        <input type="text" id="name" name="name" value="{{ old('name', $product->name) }}"
-                            placeholder="e.g. Wireless Headphone"
-                            class="w-full border-white/10 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all duration-300"
-                            style="background-color: #0d0e14; color: #ffffff;">
+                    
+                    {{-- Nama Produk --}}
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-gray-400 mb-2">Nama Produk</label>
+                        <input type="text" name="name" id="name" required
+                               class="w-full bg-[#131520] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
+                               placeholder="e.g. Wireless Headphones"
+                               value="{{ old('name', $product->name) }}">
                         @error('name')
-                            <p class="text-red-400 text-xs mt-1">{{ $message }}</p>
+                            <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
 
-                    {{-- Grid: Qty & Price --}}
-                    <div class="grid grid-cols-2 gap-6">
-                        <div class="space-y-2">
-                            <label for="quantity" class="block text-xs font-bold text-slate-400 uppercase tracking-widest">Quantity</label>
-                            <input type="number" id="quantity" name="quantity" value="{{ old('quantity', $product->qty) }}"
-                                placeholder="0" min="0"
-                                class="w-full border-white/10 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all duration-300"
-                                style="background-color: #0d0e14; color: #ffffff;">
+                    {{-- Kategori --}}
+                    <div>
+                        <label for="category_id" class="block text-sm font-medium text-gray-400 mb-2">Kategori</label>
+                        <select name="category_id" id="category_id" required
+                                class="w-full bg-[#131520] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all appearance-none">
+                            <option value="">-- Pilih Kategori --</option>
+                            @foreach ($categories as $category)
+                                <option value="{{ $category->id }}" {{ old('category_id', $product->category_id) == $category->id ? 'selected' : '' }}>
+                                    {{ $category->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('category_id')
+                            <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {{-- Quantity --}}
+                        <div>
+                            <label for="quantity" class="block text-sm font-medium text-gray-400 mb-2">Quantity</label>
+                            <input type="text" name="quantity" id="quantity" required
+                                   class="w-full bg-[#131520] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
+                                   placeholder="0"
+                                   value="{{ old('quantity', $product->quantity) }}">
                             @error('quantity')
-                                <p class="text-red-400 text-xs mt-1">{{ $message }}</p>
+                                <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
                             @enderror
                         </div>
 
-                        <div class="space-y-2">
-                            <label for="price" class="block text-xs font-bold text-slate-400 uppercase tracking-widest">Price (Rp)</label>
-                            <input type="number" id="price" name="price" value="{{ old('price', $product->price) }}"
-                                placeholder="0" min="0"
-                                class="w-full border-white/10 rounded-xl px-4 py-3 text-white placeholder-slate-600 focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all duration-300"
-                                style="background-color: #0d0e14; color: #ffffff;">
+                        {{-- Price --}}
+                        <div>
+                            <label for="price" class="block text-sm font-medium text-gray-400 mb-2">Price (Rp)</label>
+                            <input type="number" name="price" id="price" required step="0.01"
+                                   class="w-full bg-[#131520] border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all"
+                                   placeholder="0"
+                                   value="{{ old('price', $product->price) }}">
                             @error('price')
-                                <p class="text-red-400 text-xs mt-1">{{ $message }}</p>
+                                <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
                             @enderror
                         </div>
                     </div>
 
-                    {{-- Actions --}}
-                    <div class="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-                        <button type="button" 
-                                onclick="if(confirm('Permanently delete this product?')) { document.getElementById('delete-product-form').submit(); }"
-                                class="flex items-center gap-2 text-red-500/70 hover:text-red-500 text-xs font-bold uppercase tracking-widest transition-colors">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                            Delete
-                        </button>
-                        
+                    <div class="flex items-center justify-end gap-4 pt-4">
+                        <a href="{{ route('product.index') }}" 
+                           class="px-6 py-2.5 bg-white/5 hover:bg-white/10 text-white font-semibold rounded-xl transition-all border border-white/10">
+                            Cancel
+                        </a>
                         <button type="submit" 
-                                class="w-full sm:w-auto px-8 py-3 text-white font-bold rounded-xl transition-all duration-300 shadow-lg active:scale-95"
-                                style="background-color: #4f46e5;">
+                                class="px-6 py-2.5 bg-amber-600 hover:bg-amber-700 text-white font-semibold rounded-xl transition-all shadow-lg shadow-amber-600/20">
                             Update Product
                         </button>
                     </div>
-                </form>
-                
-                <form id="delete-product-form" action="{{ route('product.delete', $product->id) }}" method="POST" class="hidden">
-                    @csrf
-                    @method('DELETE')
                 </form>
             </div>
         </div>
