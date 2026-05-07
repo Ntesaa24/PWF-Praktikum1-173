@@ -18,18 +18,21 @@
                         $links = [
                             ['name' => 'Dashboard', 'route' => 'dashboard'],
                             ['name' => 'Product', 'route' => 'product.index', 'activePattern' => 'product.*'],
+                            ['name' => 'Category', 'route' => 'categories.index', 'activePattern' => 'categories.*'],
                             ['name' => 'About', 'route' => 'about'],
                         ];
                     @endphp
 
                     @foreach($links as $link)
-                        <a href="{{ route($link['route']) }}" 
-                           class="inline-flex items-center px-4 pt-1 border-b-2 text-sm font-medium leading-5 transition duration-150 ease-in-out h-full
-                           {{ request()->routeIs($link['activePattern'] ?? $link['route']) 
-                              ? 'border-indigo-500 text-white' 
-                              : 'border-transparent text-slate-400 hover:text-slate-200 hover:border-slate-700' }}">
-                            {{ __($link['name']) }}
-                        </a>
+                        @if($link['name'] !== 'Category' || Auth::user()->can('manage-categories'))
+                            <a href="{{ route($link['route']) }}" 
+                               class="inline-flex items-center px-4 pt-1 border-b-2 text-sm font-medium leading-5 transition duration-150 ease-in-out h-full
+                               {{ request()->routeIs($link['activePattern'] ?? $link['route']) 
+                                  ? 'border-indigo-500 text-white' 
+                                  : 'border-transparent text-slate-400 hover:text-slate-200 hover:border-slate-700' }}">
+                                {{ __($link['name']) }}
+                            </a>
+                        @endif
                     @endforeach
                 </div>
             </div>
@@ -100,6 +103,11 @@
             <x-responsive-nav-link :href="route('about')" :active="request()->routeIs('about')">
                 {{ __('About') }}
             </x-responsive-nav-link>
+            @can('manage-categories')
+                <x-responsive-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.*')">
+                    {{ __('Category') }}
+                </x-responsive-nav-link>
+            @endcan
         </div>
 
         <!-- Responsive Settings Options -->
